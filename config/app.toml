@@ -1,0 +1,15 @@
+
+[api]
+enable = true
+swagger = true
+address = "tcp://0.0.0.0:1317"
+
+[evm]
+tracer = "json"
+
+[json-rpc]
+enable = true
+address = "0.0.0.0:8545"
+ws-address = "0.0.0.0:8546"
+api = "eth,net,web3,personal,txpool"
+gas-cap = 25000000

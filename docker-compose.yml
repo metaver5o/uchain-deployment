@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  uchain-node:
+    image: tharsishq/evmos:v19.0.0
+    container_name: uchain-node
+    user: "0:0"
+    restart: unless-stopped
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+      - "8545:8545"
+      - "8546:8546"
+    volumes:
+      - ./data:/root/.evmos
+      - ./scripts:/scripts:ro
+      - ./evmosd_home:/root/.evmosd
+      # - ./genesis:/genesis:ro
+    environment:
+      - MONIKER=uchain-validator
+      - CHAIN_ID=evmos_9000-1
+      - KEYRING_BACKEND=test
+    command: /bin/sh -c "/scripts/init-chain.sh && evmosd start --minimum-gas-prices=0.0001ucash --home /root/.evmos"
+    networks:
+      - uchain-network
+networks:
+  uchain-network:
+    driver: bridge

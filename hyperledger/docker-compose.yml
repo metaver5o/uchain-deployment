@@ -1,0 +1,91 @@
+version: "3.7"
+
+services:
+  # -----------------------------------------------------------------
+  # Besu: The Execution Client (EL) 
+  # Handles EVM execution, transactions, and state storage.
+  # -----------------------------------------------------------------
+  besu_el:
+    image: hyperledger/besu:latest
+    container_name: besu-el-node
+    environment:
+      # Besu requires these to be set as environment variables for network config
+      - BESU_NETWORK_ID=${NETWORK_ID}
+    volumes:
+      - ./config:/config
+      - besu-data:/opt/besu/data
+    ports:
+      # External ports for dApps/wallets
+      - "${BESU_RPC_PORT}:8545"
+      - "${BESU_WS_PORT}:8546"
+      # P2P discovery port
+      - "${BESU_P2P_PORT}:30303"
+    command:
+      - --genesis-file=/config/genesis.json
+      - --network-id=${NETWORK_ID}
+      - --data-path=/opt/besu/data
+      - --rpc-http-enabled=true
+      - --rpc-http-host=0.0.0.0
+      - --rpc-http-port=8545
+      - --rpc-http-cors-origins=*
+      - --rpc-ws-enabled=true
+      - --rpc-ws-host=0.0.0.0
+      - --rpc-ws-port=8546
+      - --engine-rpc-enabled=true
+      - --engine-rpc-port=${ENGINE_API_PORT}
+      - --engine-jwt-secret=/config/jwtsecret.hex
+      - --sync-mode=FULL
+      - --p2p-enabled=true
+      - --p2p-host=0.0.0.0
+      - --p2p-port=30303
+    restart: unless-stopped
+    # Alias the internal network for the consensus client
+    networks:
+      default:
+        aliases:
+          - besu_el 
+
+  # -----------------------------------------------------------------
+  # Teku: The Consensus Client (CL) and Validator 
+  # Handles PoS consensus logic, block proposal, and finality.
+  # -----------------------------------------------------------------
+  teku_cl:
+    image: consensys/teku:latest 
+    container_name: teku-cl-node
+    user: "0:0"  # Run as root to avoid permission issues
+    volumes:
+      - ./config:/config
+      - teku-data:/opt/teku/data
+    ports:
+      # P2P discovery port for the consensus layer
+      - "${TEKU_P2P_PORT}:9000"
+      # REST API port
+      - "5051:5051"
+    command:
+      # Required for communication with the EL client (Besu)
+      - --ee-endpoint=http://besu_el:${ENGINE_API_PORT}
+      - --ee-jwt-secret-file=/config/jwtsecret.hex
+      # Use minimal preset for development
+      - --network=/config/config.yaml
+      - --data-path=/opt/teku/data
+      - --p2p-port=${TEKU_P2P_PORT}
+      - --log-destination=CONSOLE
+      - --logging=INFO
+      - --validators-proposer-default-fee-recipient=0x9858EfFD232B4033E47d90003D41EC34EcaEda94
+      # REST API settings
+      - --rest-api-enabled=true
+      - --rest-api-host-allowlist=*
+      - --rest-api-interface=0.0.0.0
+      - --rest-api-port=5051
+    restart: unless-stopped
+    depends_on:
+      - besu_el
+    # Alias the internal network for Besu to find it
+    networks:
+      default:
+        aliases:
+          - teku_cl
+
+volumes:
+  besu-data:
+  teku-data:

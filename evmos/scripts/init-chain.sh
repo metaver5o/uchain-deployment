@@ -39,9 +39,7 @@ jq '
 .app_state.gov.params.min_deposit[0].denom = "ucash" |
 .app_state.crisis.constant_fee.denom = "ucash" |
 .app_state.evm.params.evm_denom = "ucash" |
-.app_state.bank.supply[0].denom = "ucash" |
-.app_state.bank.balances[0].coins[0].denom = "ucash" |
-.app_state.erc20.token_pairs[0].denom = "ucash"
+.consensus = {"validators":[],"params":{"block":{"max_bytes":"22020096","max_gas":"-1","time_iota_ms":"1000"},"evidence":{"max_age_num_blocks":"100000","max_age_duration":"172800000000000","max_bytes":"1048576"},"validator":{"pub_key_types":["ed25519"]},"version":{}}}
 ' "$HOME_DIR/config/genesis.json" > "$HOME_DIR/config/genesis_temp.json" && \
 mv "$HOME_DIR/config/genesis_temp.json" "$HOME_DIR/config/genesis.json"
 

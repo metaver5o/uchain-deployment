@@ -1,0 +1,28 @@
+# my global config
+global:
+  scrape_interval: 1s # By default, scrape targets every 1 second
+  evaluation_interval: 1s # By default, scrape targets every 1 second
+
+# remote_write:
+#   - url: "http://remote-storage-adapter:9201/write"
+
+scrape_configs:
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "uchain-tendermint"
+    static_configs:
+      - targets: ["uchain-node:26660"]
+
+  - job_name: "uchain-rpc"
+    metrics_path: /debug/metrics/prometheus
+    static_configs:
+      - targets: ["uchain-node:6065"]
+
+  - job_name: "uchain-api"
+    params:
+      format: ['prometheus']
+    static_configs:
+      - targets: ["uchain-node:1317"]

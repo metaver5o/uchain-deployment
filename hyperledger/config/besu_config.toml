@@ -1,0 +1,31 @@
+# Besu Configuration File
+# Network settings
+network="DEV"
+genesis-file="/config/genesis.json"
+data-path="/opt/besu/data"
+
+# RPC settings
+rpc-http-enabled=true
+rpc-http-host="0.0.0.0"
+rpc-http-port=8545
+rpc-http-cors-origins=["all"]
+rpc-ws-enabled=true
+rpc-ws-host="0.0.0.0"
+rpc-ws-port=8546
+
+# P2P settings
+p2p-enabled=true
+p2p-host="0.0.0.0"
+p2p-port=30303
+
+# Engine API settings (for PoS)
+engine-rpc-enabled=true
+engine-rpc-port=8551
+engine-jwt-secret="/config/jwtsecret.hex"
+
+# Sync and performance
+sync-mode="FULL"
+data-storage-format="BONSAI"
+
+# Logging
+logging="INFO"

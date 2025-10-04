@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  uchain-node:
+    image: tharsishq/evmos:v19.0.0
+    container_name: uchain-node
+    user: "0:0"
+    restart: unless-stopped
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+      - "8545:8545"
+      - "8546:8546"
+      - "26660:26660"
+      - "6065:6065"
+    volumes:
+      - ./data:/root/.evmos
+    environment:
+      - MONIKER=uchain-sync
+      - CHAIN_ID=evmos_9000-1
+      - KEYRING_BACKEND=test
+    command: evmosd start --p2p.seeds="SEED_NODE_IDS" --p2p.persistent_peers="rpc.u.chain:26656" --minimum-gas-prices=0.0001ucash --pruning=nothing --api.enable --json-rpc.enable --json-rpc.api eth,net,web3 --home /root/.evmos --rpc.laddr tcp://0.0.0.0:26657
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:26657/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: uchain-network
+    driver: bridge

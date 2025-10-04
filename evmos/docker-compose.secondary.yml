@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  uchain-secondary:
+    image: tharsishq/evmos:v19.0.0
+    container_name: uchain-secondary
+    user: "0:0"
+    restart: unless-stopped
+    ports:
+      - "26666:26656"
+      - "26667:26657"
+      - "1318:1317"
+      - "8555:8545"
+      - "8556:8546"
+      - "26670:26660"
+      - "6066:6065"
+    volumes:
+      - ./data-secondary:/root/.evmos
+      - ./scripts:/scripts:ro
+      - ./evmosd_home:/root/.evmosd
+    environment:
+      - MONIKER=uchain-secondary
+      - CHAIN_ID=evmos_9000-1
+      - KEYRING_BACKEND=test
+      - PERSISTENT_PEERS=0d78ac9ee25c29a45806228b985a853033b08ddc@uchain-node:26656
+    command: /bin/sh -c "/scripts/init-chain.sh && evmosd start --minimum-gas-prices=0.0001ucash --pruning=nothing --metrics --api.enable --json-rpc.enable --json-rpc.api eth,net,web3,personal,debug --home /root/.evmos --rpc.laddr tcp://0.0.0.0:26657"
+    networks:
+      - uchain-network
+
+networks:
+  uchain-network:
+    name: uchain-deployment_uchain-network
+    external: true

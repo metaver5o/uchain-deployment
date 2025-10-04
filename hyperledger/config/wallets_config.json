@@ -1,0 +1,98 @@
+{
+  "network": "u.chain-devnet",
+  "chain_id": 1337,
+  "rpc_url": "http://localhost:8545",
+  "timestamp": 1759612381,
+  "wallets": [
+    {
+      "name": "Treasury_Main",
+      "address": "0x9858EfFD232B4033E47d90003D41EC34EcaEda94",
+      "private_key": "1ab42cc412b618bdea3a599e3c9bae199ebf030895b039e9db1e30dafb12b727",
+      "seed_phrase": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "derivation_path": "m/44'/60'/0'/0/0",
+      "account_index": 0,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "Treasury_Reserve",
+      "address": "0x6Fac4D18c912343BF86fa7049364Dd4E424Ab9C0",
+      "private_key": "9a983cb3d832fbde5ab49d692b7a8bf5b5d232479c99333d0fc8e1d21f1b55b6",
+      "seed_phrase": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "derivation_path": "m/44'/60'/0'/0/1",
+      "account_index": 1,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "Treasury_Ops",
+      "address": "0xb6716976A3ebe8D39aCEB04372f22Ff8e6802D7A",
+      "private_key": "5b824bd1104617939cd07c117ddc4301eb5beeca0904f964158963d69ab9d831",
+      "seed_phrase": "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about",
+      "derivation_path": "m/44'/60'/0'/0/2",
+      "account_index": 2,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "Validator_1",
+      "address": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "private_key": "ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+      "seed_phrase": "test test test test test test test test test test test junk",
+      "derivation_path": "m/44'/60'/0'/0/0",
+      "account_index": 0,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "Validator_2",
+      "address": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+      "private_key": "59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d",
+      "seed_phrase": "test test test test test test test test test test test junk",
+      "derivation_path": "m/44'/60'/0'/0/1",
+      "account_index": 1,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "Validator_3",
+      "address": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
+      "private_key": "5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a",
+      "seed_phrase": "test test test test test test test test test test test junk",
+      "derivation_path": "m/44'/60'/0'/0/2",
+      "account_index": 2,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "User_Alice",
+      "address": "0xa817afd48e0f85c4555453912785d1e4142608EB",
+      "private_key": "2a0d9b9e39b5aceaa4720463a904d945e993757cd8cee7ff35c9b572985d79ea",
+      "seed_phrase": "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold",
+      "derivation_path": "m/44'/60'/0'/0/0",
+      "account_index": 0,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "User_Bob",
+      "address": "0xB08EDfBF18436b79f5846329187D3db1BBd8fC17",
+      "private_key": "4e6db43cc74e488d9a4c4db1d19360b7de004cf4c566d8440a45ab269eb019b7",
+      "seed_phrase": "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold",
+      "derivation_path": "m/44'/60'/0'/0/1",
+      "account_index": 1,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "User_Charlie",
+      "address": "0xbeAAC73bB7041555ebbCA743D9ab6a0CdE6Bc2B8",
+      "private_key": "777b03d53a62235e5abe5db32179b49fddf55621a85764be658c05e8ffb33e20",
+      "seed_phrase": "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold",
+      "derivation_path": "m/44'/60'/0'/0/2",
+      "account_index": 2,
+      "balance_eth": "1000"
+    },
+    {
+      "name": "User_Dave",
+      "address": "0xe8A54b8971a7D00d26570826b3d3Fb0FA9A70c7A",
+      "private_key": "68258e1357477a04cb43e73b88c0423258f34ddfc14eb347ef520201b4772d28",
+      "seed_phrase": "void come effort suffer camp survey warrior heavy shoot primary clutch crush open amazing screen patrol group space point ten exist slush involve unfold",
+      "derivation_path": "m/44'/60'/0'/0/3",
+      "account_index": 3,
+      "balance_eth": "1000"
+    }
+  ]
+}

@@ -12,19 +12,18 @@
     "muirGlacierBlock": 0,
     "berlinBlock": 0,
     "londonBlock": 0,
-    "arrowGlacierBlock": 0,
-    "grayGlacierBlock": 0,
-    "mergeNetsplitBlock": 0,
-    "terminalTotalDifficulty": 0,
-    "ethash": {}
+    "clique": {
+      "period": 15,
+      "epoch": 30000
+    }
   },
   "nonce": "0x0",
   "timestamp": "0x68e18ddc",
   "gasLimit": "0x47b784",
-  "difficulty": "0x0",
+  "difficulty": "0x1",
   "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "coinbase": "0x0000000000000000000000000000000000000000",
-  "extraData": "0x",
+  "extraData": "0x00000000000000000000000000000000000000000000000000000000000000009858EfFD232B4033E47d90003D41EC34EcaEda940000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
   "alloc": {
     "0x9858EfFD232B4033E47d90003D41EC34EcaEda94": {
       "balance": "1000000000000000000000"

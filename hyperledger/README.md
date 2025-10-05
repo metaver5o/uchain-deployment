@@ -1,205 +1,225 @@
-# u.chain Dynamic Wallet System
+# UCASH Blockchain - Home Deployment
 
-This setup automatically generates wallets on-the-fly when launching the u.chain blockchain, making development and testing much easier.
+🚀 **Professional EVM L1 UCASH Node for Home Deployment**
+
+A complete Ethereum-compatible blockchain built with Hyperledger Besu, featuring the UCASH token with ultra-low transaction fees and fast block times.
+
+## � Features
+
+- **EVM Compatible**: Full Ethereum Virtual Machine compatibility
+- **Ultra-Low Fees**: Minimum gas price of 0.000002 UCASH per transaction
+- **Fast Blocks**: 5-second block time for quick confirmations
+- **MetaMask Ready**: Works seamlessly with MetaMask wallet
+- **Docker Containerized**: One-command deployment
+- **Pre-funded Accounts**: 10 test accounts with 1000 UCASH each
+
+## 🏗️ Technical Specifications
+
+- **Consensus**: Clique Proof of Authority (PoA)
+- **Chain ID**: 1337
+- **Currency**: UCASH
+- **Block Time**: 5 seconds
+- **Gas Price**: 2,000,000,000,000 wei (0.000002 UCASH)
+- **Gas Limit**: 30,000,000 per block
 
 ## 🚀 Quick Start
 
-```bash
-# One-command launch (recommended)
-./quickstart.sh
+### Prerequisites
+- Docker Desktop installed and running
+- MetaMask browser extension
 
-# Or use the interactive menu
-./launch.sh
+### 1. Clone and Start
+```bash
+git clone <repository-url>
+cd uchain-deployment/hyperledger
+docker compose up -d
 ```
 
-## 🏦 Wallet Generation Features
-
-### Deterministic Wallets (Default)
-- Uses predefined seed phrases for consistent testing
-- Same addresses every time for reproducible development
-- Three wallet groups: Treasury, Validators, Users
-
-### Random Wallets
-- Generates fresh random seed phrases
-- Different addresses each launch
-- Good for testing randomness and edge cases
-
-## 📋 Generated Wallet Groups
-
-### Treasury Accounts (Seed: `abandon abandon abandon...`)
-- **Treasury_Main**: Primary treasury account
-- **Treasury_Reserve**: Reserve funds
-- **Treasury_Ops**: Operational expenses
-
-### Validator Accounts (Seed: `test test test...`)
-- **Validator_1**: Primary validator
-- **Validator_2**: Secondary validator  
-- **Validator_3**: Backup validator
-
-### User Accounts (Seed: `void come effort...`)
-- **User_Alice**: Test user Alice
-- **User_Bob**: Test user Bob
-- **User_Charlie**: Test user Charlie
-- **User_Dave**: Test user Dave
-
-Each account is pre-funded with **1000 UCASH**.
-
-## 🛠️ Usage Options
-
-### 1. Full Launch (Wallets + Blockchain)
+### 2. Verify Blockchain is Running
 ```bash
-./quickstart.sh
-# or 
-python dynamic_launcher.py
+# Check if blocks are being produced
+curl -X POST -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  http://localhost:8545
+
+# Check gas price (should return 0x1d1a94a2000 = 0.000002 UCASH)
+curl -X POST -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_gasPrice","params":[],"id":1}' \
+  http://localhost:8545
 ```
 
-### 2. Generate Wallets Only
-```bash
-python dynamic_launcher.py --wallets-only
-```
+## 🦊 MetaMask Configuration
 
-### 3. Use Random Wallets
-```bash
-python dynamic_launcher.py --random
-```
-
-### 4. Interactive Menu
-```bash
-./launch.sh
-```
-
-## 📁 Generated Files
-
-- **`genesis.json`**: Blockchain genesis with wallet allocations
-- **`WALLETS.txt`**: Quick reference for all wallet info
-- **`config/wallets_config.json`**: Detailed wallet configuration
-- **`config/jwtsecret.hex`**: JWT secret for consensus communication
-
-## 🦊 MetaMask Integration
-
-### Import via Seed Phrase (Recommended)
+### Add UCASH Network
 1. Open MetaMask
-2. Click account menu → "Import Account"
-3. Select "Import using account seed phrase"
-4. Use one of the seed phrases from `WALLETS.txt`
+2. Click Networks → "Add Network" → "Add a network manually"
+3. Enter the following details:
 
-### Import via Private Key
-1. Copy any private key from `WALLETS.txt`
-2. MetaMask → Import Account → Private Key
-3. Paste the private key
+| Field | Value |
+|-------|-------|
+| **Network Name** | uchain-local |
+| **RPC URL** | http://localhost:8545 |
+| **Chain ID** | 1337 |
+| **Currency Symbol** | UCASH |
+| **Block Explorer URL** | *(leave empty)* |
 
-### Network Configuration
-- **Network Name**: u.chain Devnet
-- **RPC URL**: `http://localhost:8545`
-- **Chain ID**: `1337`
-- **Currency Symbol**: `UCASH`
+### Import Test Accounts
 
-## 🔧 Development Tools
+Import these pre-funded accounts into MetaMask:
 
-### Web3 Connection Test
-```bash
-source wallet_env/bin/activate
-python test_web3_connection.py
-```
+#### Account 1 (Miner/Validator)
+- **Address**: `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`
+- **Private Key**: `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`
+- **Balance**: ~1000 UCASH
 
-### Wallet Manager
-```bash
-source wallet_env/bin/activate
-python wallet_manager.py
-```
+#### Account 2 (Recommended for Testing)
+- **Address**: `0x70997970C51812dc3A010C7d01b50e0d17dc79C8`
+- **Private Key**: `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
+- **Balance**: 1000 UCASH
 
-### Generate Environment Variables
-The wallet manager can create `.env` files and Hardhat configurations for easy integration with your dApps.
+#### Account 3
+- **Address**: `0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC`
+- **Private Key**: `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
+- **Balance**: 1000 UCASH
 
-## 🐳 Docker Management
+*Additional accounts available in the genesis configuration file.*
 
-### View Logs
-```bash
-docker compose logs -f
-```
+## 💸 Transaction Testing
 
-### Stop Blockchain
-```bash
-docker compose down
-```
+1. **Import multiple accounts** into MetaMask using the private keys above
+2. **Send transactions** between accounts to test functionality
+3. **Verify transactions** appear as both "Sent" and "Received" in respective accounts
+4. **Confirm low fees** - transactions cost only 0.000002 UCASH minimum
 
-### Reset Everything
-```bash
-docker compose down -v
-rm -rf genesis.json WALLETS.txt config/wallets_config.json
-```
+## �️ Development
 
-## 🔐 Security Notes
-
-- **Development Only**: These are test wallets with known seed phrases
-- **Never use in production**: Generate fresh seeds for mainnet
-- **Backup Important**: Save your seed phrases securely
-- **Private Keys**: Never share private keys in production
-
-## 🎯 Advanced Usage
-
-### Custom Wallet Configuration
-Edit `dynamic_launcher.py` to customize:
-- Number of wallets per group
-- Initial balance amounts  
-- Wallet naming schemes
-- Seed phrase sources
-
-### Integration with dApps
-Use the generated `config/wallets_config.json` to automatically configure your development environment.
-
-### Automated Testing
-The deterministic wallets make automated testing easier since you get the same addresses every time.
-
-## 🐛 Troubleshooting
-
-### Docker Issues
-```bash
-# Restart Docker daemon
-# Check Docker compose version
-docker compose version
-```
-
-### Python Environment
-```bash
-# Recreate virtual environment
-rm -rf wallet_env
-python3 -m venv wallet_env
-source wallet_env/bin/activate
-pip install -r requirements.txt
-```
-
-### Genesis File Issues
-```bash
-# Regenerate genesis file
-python dynamic_launcher.py --wallets-only
-```
-
-## 📚 File Structure
-
+### Project Structure
 ```
 hyperledger/
-├── quickstart.sh              # One-command launch
-├── launch.sh                  # Interactive menu  
-├── dynamic_launcher.py        # Main wallet generator
-├── wallet_manager.py          # Wallet management tools
-├── generate_wallets.py        # Original generator
-├── requirements.txt           # Python dependencies
-├── docker-compose.yml         # Blockchain configuration
-├── genesis.json              # Generated genesis file
-├── WALLETS.txt               # Quick wallet reference
+├── docker-compose.yml     # Container orchestration
 ├── config/
-│   ├── wallets_config.json   # Detailed wallet config
-│   ├── jwtsecret.hex         # JWT secret
-│   └── besu_config.toml      # Besu configuration
-└── wallet_env/               # Python virtual environment
+│   ├── genesis.json       # Blockchain genesis configuration
+│   ├── jwtsecret.hex     # Engine API authentication
+│   └── key               # Node private key for mining
+└── README.md             # This file
 ```
 
-## 🚀 What's Next?
+### Configuration Files
 
-1. **Launch your blockchain**: `./quickstart.sh`
-2. **Import wallets to MetaMask**: Use seed phrases from `WALLETS.txt`
-3. **Start building**: Connect your dApps to `http://localhost:8545`
-4. **Test transactions**: Send UCASH between the generated accounts
+#### Genesis Configuration (`config/genesis.json`)
+- Pre-funded accounts with 1000 UCASH each
+- Clique PoA consensus with 5-second blocks
+- EIP compatibility for modern Ethereum features
 
-Happy building! 🎉
+#### Docker Compose (`docker-compose.yml`)
+- Hyperledger Besu execution client
+- Optimized for single-node development
+- Port mappings for RPC (8545) and WebSocket (8546)
+
+## 🔧 Management Commands
+
+### Start/Stop Blockchain
+```bash
+# Start
+docker compose up -d
+
+# Stop
+docker compose down
+
+# Restart with fresh data
+docker compose down
+docker volume rm hyperledger_besu-data
+docker compose up -d
+```
+
+### Check Status
+```bash
+# Container status
+docker compose ps
+
+# View logs
+docker compose logs besu_el --tail=20
+
+# Check block production
+curl -X POST -H "Content-Type: application/json" \
+  --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+  http://localhost:8545
+```
+
+## 🌐 Network Endpoints
+
+- **RPC Endpoint**: http://localhost:8545
+- **WebSocket**: ws://localhost:8546
+- **Engine API**: http://localhost:8551 (internal)
+
+## ✅ Verification Checklist
+
+After deployment, verify:
+
+- [ ] Containers are running: `docker compose ps`
+- [ ] Blocks are producing: Block number increases every 5 seconds
+- [ ] Gas price correct: Returns `0x1d1a94a2000` (0.000002 UCASH)
+- [ ] MetaMask connects successfully to localhost:8545
+- [ ] Test accounts imported and showing 1000 UCASH balance
+- [ ] Transactions confirm within 5-10 seconds
+- [ ] Both "Sent" and "Received" transactions appear in MetaMask
+
+## � Troubleshooting
+
+### Common Issues
+
+**Container won't start:**
+```bash
+# Check Docker is running
+docker ps
+
+# Remove old volumes and restart
+docker compose down
+docker volume prune
+docker compose up -d
+```
+
+**No blocks producing:**
+```bash
+# Check Besu logs for errors
+docker compose logs besu_el
+
+# Verify genesis configuration is valid
+cat config/genesis.json | jq .
+```
+
+**MetaMask connection issues:**
+- Ensure RPC URL is exactly `http://localhost:8545`
+- Verify Chain ID is `1337`
+- Try refreshing MetaMask or restarting browser
+
+## 📋 System Requirements
+
+- **OS**: macOS, Linux, or Windows with Docker Desktop
+- **RAM**: 4GB minimum, 8GB recommended
+- **Storage**: 10GB free space
+- **Network**: Port 8545 and 8546 available
+
+## 🎯 Production Notes
+
+This configuration is optimized for **development and testing**. For production deployment:
+
+- Implement proper key management
+- Configure networking security
+- Set up monitoring and logging
+- Consider multi-node setup for redundancy
+- Implement backup strategies
+
+## � Support
+
+For issues or questions:
+1. Check the troubleshooting section above
+2. Review container logs: `docker compose logs`
+3. Verify network configuration in MetaMask
+4. Ensure all prerequisites are met
+
+---
+
+**🎉 Congratulations! Your UCASH blockchain is ready for home deployment!**
+
+*Built with Hyperledger Besu • Ethereum Compatible • Ultra-Low Fees*

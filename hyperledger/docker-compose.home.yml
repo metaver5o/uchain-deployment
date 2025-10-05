@@ -1,0 +1,63 @@
+version: "3.7"
+
+# Configuration for Home Users Connecting to UCASH Network
+# These nodes connect to server bootnodes
+
+services:
+  besu_el:
+    image: hyperledger/besu:latest
+    container_name: besu-home-node
+    environment:
+      - BESU_NETWORK_ID=${NETWORK_ID}
+    volumes:
+      - ./config:/config
+      - besu-data:/opt/besu/data
+    ports:
+      # Local RPC for MetaMask
+      - "${BESU_RPC_PORT}:8545"
+      - "${BESU_WS_PORT}:8546"
+      # P2P port for connecting to network
+      - "${BESU_P2P_PORT}:30303"
+    command:
+      - --genesis-file=/config/genesis.json
+      - --network-id=${NETWORK_ID}
+      - --data-path=/opt/besu/data
+      
+      # Local RPC for MetaMask
+      - --rpc-http-enabled=true
+      - --rpc-http-host=0.0.0.0
+      - --rpc-http-port=8545
+      - --rpc-http-cors-origins=*
+      - --rpc-http-api=ETH,NET,WEB3,TXPOOL
+      - --host-allowlist=localhost,127.0.0.1
+      
+      # WebSocket for local dApps
+      - --rpc-ws-enabled=true
+      - --rpc-ws-host=0.0.0.0
+      - --rpc-ws-port=8546
+      
+      # P2P Networking - Connect to UCASH network
+      - --p2p-enabled=true
+      - --p2p-host=0.0.0.0
+      - --p2p-port=30303
+      - --discovery-enabled=true
+      - --max-peers=25
+      
+      # Connect to UCASH bootnodes (YOUR SERVER IPs)
+      - --bootnodes=${UCASH_BOOTNODES}
+      
+      # Home nodes don't mine (unless they want to)
+      - --miner-enabled=false
+      
+      # UCASH Gas Configuration
+      - --min-gas-price=2000000000000
+      - --target-gas-limit=30000000
+      
+      # Sync Configuration
+      - --sync-mode=FAST
+      - --auto-log-bloom-caching-enabled=false
+      
+    restart: unless-stopped
+
+volumes:
+  besu-data:

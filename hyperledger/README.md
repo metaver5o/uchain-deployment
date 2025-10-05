@@ -2,7 +2,53 @@
 
 🚀 **Professional EVM L1 UCASH Node for Home Deployment**
 
-A complete Ethereum-compatible blockchain built with Hyperledger Besu, featuring the UCASH token with ultra-low transaction fees and fast block times.
+A complete Ethe## 🌐 Network Architecture  
+
+### Deployment Types
+
+#### 🏠 Home Nodes
+- **Purpose**: Connect to existing UCASH network
+- **Features**: Download blockchain, provide local RPC, optional mining
+- **Requirements**: Internet connection, Docker
+- **Configuration**: `docker-compose.home.yml`
+
+#### 🖥️ Server Nodes  
+- **Purpose**: Network infrastructure (bootnodes/validators)
+- **Features**: Accept connections, validate transactions, public RPC
+- **Requirements**: Public IP, open ports 30303 & 8545
+- **Configuration**: `docker-compose.server.yml`
+
+#### 🔧 Local Development
+- **Purpose**: Isolated testing environment  
+- **Features**: Pre-funded accounts, fast iteration
+- **Requirements**: Docker only
+- **Configuration**: `docker-compose.yml`
+
+### Network Topology
+```
+Server Nodes (Validators/Bootnodes)
+       ↕        ↕        ↕
+  Home Node  Home Node  Home Node
+     ↕        ↕        ↕  
+  MetaMask   dApps   Wallets
+```
+
+## 🛠️ Development
+
+### Project Structure
+```
+hyperledger/
+├── deploy-network.sh          # Network deployment script
+├── docker-compose.yml         # Local development
+├── docker-compose.home.yml    # Home node configuration
+├── docker-compose.server.yml  # Server node configuration
+├── .env.network              # Network environment variables
+├── config/
+│   ├── genesis.json          # Blockchain genesis configuration
+│   ├── jwtsecret.hex        # Engine API authentication
+│   └── key                  # Node private key for mining
+└── README.md                # This file
+```ble blockchain built with Hyperledger Besu, featuring the UCASH token with ultra-low transaction fees and fast block times.
 
 ## � Features
 
@@ -28,11 +74,30 @@ A complete Ethereum-compatible blockchain built with Hyperledger Besu, featuring
 - Docker Desktop installed and running
 - MetaMask browser extension
 
-### 1. Clone and Start
+### 1. Clone Repository
 ```bash
 git clone https://github.com/metaver5o/uchain-deployment.git
 cd uchain-deployment/hyperledger
-docker compose up -d
+```
+
+### 2. Choose Deployment Type
+
+#### 🏠 Home Node (Connect to UCASH Network)
+```bash
+./deploy-network.sh
+# Select option 1: Home Node
+```
+
+#### 🔧 Local Development (Isolated Testing)  
+```bash
+./deploy-network.sh
+# Select option 3: Local Development
+```
+
+#### 🖥️ Server Node (For Network Operators)
+```bash
+./deploy-network.sh  
+# Select option 2: Server Node
 ```
 
 ### 2. Verify Blockchain is Running

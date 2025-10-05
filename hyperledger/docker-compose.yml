@@ -57,8 +57,9 @@ services:
   # -----------------------------------------------------------------
   # Teku: The Consensus Client (CL) and Validator 
   # Handles PoS consensus logic, block proposal, and finality.
+  # DISABLED - Using PoA Clique instead for simplicity
   # -----------------------------------------------------------------
-  teku_cl:
+  teku_cl_disabled:
     image: consensys/teku:latest 
     container_name: teku-cl-node
     user: "0:0"  # Run as root to avoid permission issues
@@ -85,8 +86,6 @@ services:
       - --log-destination=CONSOLE
       - --logging=INFO
       - --Xstartup-target-peer-count=0
-      - --initial-state=/config/genesis_state.ssz
-      - --genesis-state=/config/genesis_state.ssz
     restart: unless-stopped
     depends_on:
       - besu_el

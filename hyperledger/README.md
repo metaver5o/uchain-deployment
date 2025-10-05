@@ -30,7 +30,7 @@ A complete Ethereum-compatible blockchain built with Hyperledger Besu, featuring
 
 ### 1. Clone and Start
 ```bash
-git clone <repository-url>
+git clone https://github.com/metaver5o/uchain-deployment.git
 cd uchain-deployment/hyperledger
 docker compose up -d
 ```

@@ -18,6 +18,8 @@ services:
       # External ports for dApps/wallets
       - "${BESU_RPC_PORT}:8545"
       - "${BESU_WS_PORT}:8546"
+      # P2P port for other nodes to connect
+      - "${BESU_P2P_PORT}:30303"
     command:
       - --genesis-file=/config/genesis.json
       - --network-id=${NETWORK_ID}
@@ -38,8 +40,11 @@ services:
       - --engine-host-allowlist=localhost,127.0.0.1,besu_el,teku_cl,teku-cl-node,besu-el-node
       # Host allowlist for Docker networking (include container names and network aliases)
       - --host-allowlist=localhost,127.0.0.1,besu_el,teku_cl,teku-cl-node,besu-el-node
-      - --p2p-enabled=false
-      - --discovery-enabled=false
+      - --p2p-enabled=true
+      - --p2p-host=0.0.0.0
+      - --p2p-port=30303
+      - --discovery-enabled=true
+      - --max-peers=50
       - --sync-mode=FULL
       - --miner-enabled=true
       - --miner-coinbase=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
@@ -48,11 +53,9 @@ services:
       - --target-gas-limit=30000000
       - --auto-log-bloom-caching-enabled=false
     restart: unless-stopped
-    # Alias the internal network for the consensus client
+    # Use shared network for multi-node communication
     networks:
-      default:
-        aliases:
-          - besu_el 
+      - ucash-network
 
   # -----------------------------------------------------------------
   # Teku: The Consensus Client (CL) and Validator 
@@ -91,9 +94,12 @@ services:
       - besu_el
     # Alias the internal network for Besu to find it
     networks:
-      default:
-        aliases:
-          - teku_cl
+      - ucash-network
+
+networks:
+  ucash-network:
+    name: ucash-network
+    driver: bridge
 
 volumes:
   besu-data:

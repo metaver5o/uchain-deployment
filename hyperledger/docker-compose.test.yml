@@ -1,0 +1,144 @@
+version: "3.7"
+
+# Combined UCASH Network Test - Both Server and Home Node
+# This tests transaction syncing between two nodes on the same network
+
+services:
+  # -----------------------------------------------------------------
+  # Main Node (Acts as Server/Bootnode) 
+  # -----------------------------------------------------------------
+  besu_server:
+    image: hyperledger/besu:latest
+    container_name: besu-server-node
+    environment:
+      - BESU_NETWORK_ID=${NETWORK_ID}
+    volumes:
+      - ./config:/config
+      - besu-server-data:/opt/besu/data
+    ports:
+      # Main node ports
+      - "${BESU_RPC_PORT}:8545"
+      - "${BESU_WS_PORT}:8546"
+      - "${BESU_P2P_PORT}:30303"
+    command:
+      - --genesis-file=/config/genesis.json
+      - --network-id=${NETWORK_ID}
+      - --data-path=/opt/besu/data
+      
+      # RPC Configuration
+      - --rpc-http-enabled=true
+      - --rpc-http-host=0.0.0.0
+      - --rpc-http-port=8545
+      - --rpc-http-cors-origins=*
+      - --rpc-http-api=ETH,NET,WEB3,TXPOOL
+      - --host-allowlist=*
+      
+      # WebSocket
+      - --rpc-ws-enabled=true
+      - --rpc-ws-host=0.0.0.0
+      - --rpc-ws-port=8546
+      
+      # P2P Networking - Acts as bootnode
+      - --p2p-enabled=true
+      - --p2p-host=0.0.0.0
+      - --p2p-port=30303
+      - --discovery-enabled=true
+      - --max-peers=50
+      
+      # PoA Validator Configuration
+      - --miner-enabled=true
+      - --miner-coinbase=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+      - --node-private-key-file=/config/key
+      
+      # UCASH Configuration
+      - --min-gas-price=2000000000000
+      - --target-gas-limit=30000000
+      - --sync-mode=FULL
+      - --sync-min-peers=1
+      
+    restart: unless-stopped
+    networks:
+      - ucash-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8545 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # -----------------------------------------------------------------
+  # Home Node (Connects to Server Node)
+  # -----------------------------------------------------------------
+  besu_home:
+    image: hyperledger/besu:latest
+    container_name: besu-home-node
+    environment:
+      - BESU_NETWORK_ID=${NETWORK_ID}
+    volumes:
+      - ./config:/config
+      - besu-home-data:/opt/besu/data
+    ports:
+      # Home node ports (different to avoid conflicts)
+      - "${HOME_RPC_PORT}:8545"
+      - "${HOME_WS_PORT}:8546"
+      - "${HOME_P2P_PORT}:30303"
+    command:
+      - --genesis-file=/config/genesis.json
+      - --network-id=${NETWORK_ID}
+      - --data-path=/opt/besu/data
+      
+      # RPC Configuration
+      - --rpc-http-enabled=true
+      - --rpc-http-host=0.0.0.0
+      - --rpc-http-port=8545
+      - --rpc-http-cors-origins=*
+      - --rpc-http-api=ETH,NET,WEB3,TXPOOL
+      - --host-allowlist=*
+      
+      # WebSocket
+      - --rpc-ws-enabled=true
+      - --rpc-ws-host=0.0.0.0
+      - --rpc-ws-port=8546
+      
+      # P2P Networking - Connect to server node
+      - --p2p-enabled=true
+      - --p2p-host=0.0.0.0
+      - --p2p-port=30303
+      - --discovery-enabled=true
+      - --max-peers=25
+      
+      # Connect to server node as bootnode and static peer
+      - --bootnodes=enode://8318535b54105d4a7aae60c08fc45f9687181b4fdfc625bd1a753fa7397fed753547f11ca8696646f2f3acb08e31016afac23e630c5d11f59f61fef57b0d2aa5@172.18.0.2:30303
+      - --static-nodes-file=/config/static-nodes.json
+      
+      # Home node doesn't mine
+      - --miner-enabled=false
+      
+      # UCASH Configuration
+      - --min-gas-price=2000000000000
+      - --target-gas-limit=30000000
+      - --sync-mode=FULL
+      
+      # Reduce peer requirements for testing
+      - --sync-min-peers=1
+      
+    restart: unless-stopped
+    networks:
+      - ucash-network
+    depends_on:
+      - besu_server
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8545 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+networks:
+  ucash-network:
+    name: ucash-network
+    driver: bridge
+
+volumes:
+  besu-server-data:
+  besu-home-data:

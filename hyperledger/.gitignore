@@ -1,0 +1,52 @@
+# Hyperledger Besu UChain - Git Ignore
+
+# Scripts folder - development/testing utilities only
+scripts/
+
+# Environment files with sensitive data
+.env
+.env.*
+
+# Docker volumes and data
+*-data/
+data/
+
+# Python virtual environment
+wallet_env/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node modules if any
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+/tmp/
+
+# MacOS files
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.backup
+
+# Private keys (extra safety)
+*private*
+*secret*
+*.key
+key
+
+# Docker compose override files
+docker-compose.override.yml

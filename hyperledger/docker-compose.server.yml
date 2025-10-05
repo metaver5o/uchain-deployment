@@ -58,9 +58,12 @@ services:
       
     restart: unless-stopped
     networks:
-      default:
-        aliases:
-          - besu_server
+      - ucash-network
+
+networks:
+  ucash-network:
+    name: ucash-network
+    driver: bridge
 
 volumes:
   besu-data:

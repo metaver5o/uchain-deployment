@@ -57,7 +57,19 @@ services:
       - --sync-mode=FAST
       - --auto-log-bloom-caching-enabled=false
       
+      # Reduce peer requirements for testing
+      - --Xsynchronizer-downloader-parallelism=1
+      - --Xsynchronizer-downloader-change-target-threshold-by-height=1
+      - --Xsynchronizer-downloader-header-request-size=25
+      
     restart: unless-stopped
+    networks:
+      - ucash-network
+
+networks:
+  ucash-network:
+    name: ucash-network
+    external: true
 
 volumes:
   besu-data:
